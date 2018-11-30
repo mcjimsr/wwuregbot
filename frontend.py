@@ -1,12 +1,13 @@
 # Please only use this program in good faith.
 # Software under the 0BSD license, aka do whatever you'd like with it!
 
-from operator import itemgetter
 from selenium.webdriver.support.ui import Select
 # Import platform to receive system info from user
 import platform
 # Import Selenium -> webdriver
 from selenium import webdriver
+# Import PySimpleGUI
+import PySimpleGUI as SG
 
 def main():
     # Check if user is using MacOS or Windows
@@ -22,22 +23,47 @@ def main():
 
     def logininfo():
         global username, password
-        # Query user for universal login info
-        username = input(str("What is your Universal username?"))
-        password = input(str("What is your password?"))
-        print("Username: ", username)
-        print("Password: ", password)
+        username = SG.PopupGetText('Please type your username:','Username')
+        password = SG.PopupGetText('Please type your password:', 'Password', password_char='*')
         return username, password
 
     def crn():
-        global crn1, crn2, crn3
+        global crn1, crn2, crn3, crn4, crn5
         # Query user for CRN
-        crn = input(str("What are the CRNs for your classes? (Seperate by comma!)"))
-        crnlist = list(crn.split(','))
-        crn1 = crnlist[0]
-        crn2 = crnlist[1]
-        crn3 = crnlist[2]
-        return crn1, crn2, crn3
+        crn1 = SG.PopupGetText('Please type your first desired CRN:', 'CRN 1')
+
+        while len(crn1) is not 5:
+            SG.Popup('This CRN is not valid. Please try again.')
+            crn1 = SG.PopupGetText('Please type your first desired CRN:', 'CRN 1')
+
+        crn2 = SG.PopupGetText('Please type your second desired CRN:', 'CRN 2')
+        while len(crn2) is not 5:
+            SG.Popup('This CRN is not valid. Please try again.')
+            crn2 = SG.PopupGetText('Please type your second desired CRN:', 'CRN 2')
+
+        crn3 = SG.PopupGetText('Please type your third desired CRN:', 'CRN 3')
+        while len(crn3) is not 5:
+            SG.Popup('This CRN is not valid. Please try again.')
+            crn3 = SG.PopupGetText('Please type your third desired CRN:', 'CRN 3')
+
+        crn4 = SG.PopupGetText('Please type your fourth desired CRN: (If unneccesary, type "none")', 'CRN4')
+        if (len(crn4) is not 5) and crn4 != "none":
+            SG.Popup('This CRN is not valid. Please try again.')
+            crn5 = SG.PopupGetText('Please type your fourth desired CRN: (If unneccesary, type "none")', 'CRN4')
+
+        crn5 = SG.PopupGetText('Please type your fifth desired CRN: (If unneccesary, type "none")', 'CRN5')
+        if (len(crn5) is not 5) and crn5 != "none":
+            SG.Popup('This CRN is not valid. Please try again.')
+            crn5 = SG.PopupGetText('Please type your fifth desired CRN: (If unneccesary, type "none")', 'CRN5')
+
+        # Print CRNs
+        print(crn1, crn2, crn3)
+        if crn4 is not "none":
+            print(crn4)
+        if crn5 is not "none":
+            print(crn5)
+
+
 
     # Run finduseros
     finduseros()
@@ -95,3 +121,4 @@ def main():
 
 # Run main
 main()
+
