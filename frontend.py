@@ -8,22 +8,33 @@ import platform
 from selenium import webdriver
 # Import PySimpleGUI
 import PySimpleGUI as SG
+# Import os
+import os
 
 def main():
     # Check if user is using MacOS or Windows
     def finduseros():
         global useros
+        global cd
+        filename = "frontend.py"
         useros = platform.system()
         if "Darwin" in useros:
             useros= "macos"
+            cd = "chromedriverMac"
         if "Windows" in useros:
             useros="windows"
-        print("Current user's OS is: " + useros)
+            cd = "chromedriverWindows"
+
+        userpath = os.getcwd()
+        cd = str(userpath) + "/" + cd
+        #print(userpath)
+        #print(cd)
+
         return useros
 
     def logininfo():
         global username, password
-        username = SG.PopupGetText('Please type your username:','Username')
+        username = SG.PopupGetText('Please type your username:', 'Username')
         password = SG.PopupGetText('Please type your password:', 'Password', password_char='*')
         return username, password
 
@@ -59,9 +70,9 @@ def main():
         # Print CRNs
         print(crn1, crn2, crn3)
         if crn4 is not "none":
-            print(crn4)
+            print("CRN 4 not active.")
         if crn5 is not "none":
-            print(crn5)
+            print("CRN 5 not active.")
 
 
 
@@ -76,7 +87,7 @@ def main():
 
     def runbot():
         # Set browser to Chrome
-        browser = webdriver.Chrome('/Users/rmcj/PycharmProjects/WWU Registration Bot/chromedriver')
+        browser = webdriver.Chrome(cd)
 
         # Go to registration page
         browser.get('https://admin.wwu.edu/pls/wwis/bwskfreg.P_AltPin')
